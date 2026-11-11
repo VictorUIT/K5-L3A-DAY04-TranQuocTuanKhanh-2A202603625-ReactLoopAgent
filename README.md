@@ -90,6 +90,22 @@ python3 evals/run_evals.py --output eval_after.json
 
 Snapshot bài chính được lưu ngày 09/11/2026; snapshot của ba API bổ sung được lưu ngày 10/11/2026. Không dùng nó để trả lời tình trạng hiện tại trong thực tế. Khi chạy live, API có thể rate limit, timeout hoặc thay đổi dữ liệu.
 
+## Giao diện Streamlit (tùy chọn)
+
+Cài các dependency của giao diện:
+
+```bash
+python -m pip install -r requirements-ui.txt
+```
+
+`app.py` tự đọc cấu hình từ `.env` ở thư mục project nếu có. Đặt `PROVIDER`, `MODEL` và API key tương ứng trong file `.env` hoặc cung cấp chúng qua môi trường; không đưa file `.env` lên Git. Khởi chạy giao diện bằng:
+
+```bash
+python -m streamlit run app.py
+```
+
+Sidebar có ba chế độ: `Mock` chạy kịch bản offline không cần key, `Live` gọi LLM thật với nguồn dữ liệu `snapshot` hoặc `live`, và `Replay eval JSON` xem lại case từ báo cáo local hoặc file tải lên. Có thể đặt giới hạn `max_steps`, mô phỏng timeout/lỗi provider trong Mock, xem trace theo từng bước và xóa hội thoại. Mỗi câu hỏi được gửi độc lập tới agent, không kèm lịch sử hội thoại trước. API calls trong chế độ Live có thể phát sinh chi phí.
+
 ## Tài liệu tham khảo: làm việc với coding agent
 
 Các tài liệu dưới đây giúp bạn tham khảo cách tổ chức việc viết code với AI; **không phải task của lab và không cần cài đặt để hoàn thành bài**.
