@@ -4,16 +4,16 @@
 
 Toàn bộ các bước dưới đây thuộc bài lab. Giả định học viên đã biết Python, gọi LLM API và lý thuyết ReAct; giảng viên cung cấp sẵn tools, provider adapter và eval runner.
 
-| Thời gian | Hoạt động | Kết quả |
-|---|---|---|
-| 0–15 phút | Setup và khám phá tools, dữ liệu | Hiểu hai tools và giới hạn dữ liệu. |
-| 15–70 phút | Bài 1: tự code agent loop | Model gọi tools và nhận lại kết quả. |
-| 70–95 phút | Bài 2: xử lý lỗi và trace | Có giới hạn bước, trace và lỗi được xử lý. |
-| 95–105 phút | Nghỉ | |
-| 105–140 phút | Bài 3: chạy eval lần 1 | Có điểm, trace và danh sách lỗi. |
-| 140–195 phút | Bài 4: phân tích và cải tiến | Chọn lỗi, giải thích nguyên nhân và implement cải tiến. |
-| 195–225 phút | Bài 5: chạy eval lần 2 | So sánh điểm và lỗi với lần 1. |
-| 225–240 phút | Demo và thảo luận | Trình bày kết quả, trace và giới hạn. |
+| Thời gian     | Hoạt động                          | Kết quả                                                        |
+| -------------- | ------------------------------------- | ---------------------------------------------------------------- |
+| 0–15 phút    | Setup và khám phá tools, dữ liệu | Hiểu hai tools và giới hạn dữ liệu.                        |
+| 15–70 phút   | Bài 1: tự code agent loop           | Model gọi tools và nhận lại kết quả.                       |
+| 70–95 phút   | Bài 2: xử lý lỗi và trace        | Có giới hạn bước, trace và lỗi được xử lý.           |
+| 95–105 phút  | Nghỉ                                 |                                                                  |
+| 105–140 phút | Bài 3: chạy eval lần 1             | Có điểm, trace và danh sách lỗi.                           |
+| 140–195 phút | Bài 4: phân tích và cải tiến    | Chọn lỗi, giải thích nguyên nhân và implement cải tiến. |
+| 195–225 phút | Bài 5: chạy eval lần 2             | So sánh điểm và lỗi với lần 1.                            |
+| 225–240 phút | Demo và thảo luận                  | Trình bày kết quả, trace và giới hạn.                     |
 
 Tổng: 240 phút, bao gồm 10 phút nghỉ. Eval gọi model thật cho cả agent và judge nên thời gian và chi phí có thể thay đổi. Mỗi case chạy độc lập; kết quả được ghi sau khi cả bộ hoàn tất.
 
@@ -113,7 +113,6 @@ So sánh điểm tổng, từng case và trace; nêu lỗi đã giải quyết, 
 
 Nộp `agent.py`, `eval_before.json`, `eval_after.json` đã xóa thông tin nhạy cảm và `NOTES.md` gồm: case được chọn, evidence trong trace, thay đổi, kết quả so sánh, giới hạn. Demo một trace nhiều bước và trình bày một lỗi agent. Tên repo, nơi nộp và deadline ở [SUBMISSION.md](SUBMISSION.md).
 
-
 ## Thử thách bonus tùy chọn — 15 điểm
 
 Bài chính tối đa 85 điểm; bài bonus tối đa 15 điểm, tổng tối đa 100 điểm. Mở rộng agent sau khi hoàn thành bài chính. Bài bonus dùng **5 public status API khác nhau**: GitHub, Cloudflare, Vercel, npm và DigitalOcean. Môi trường cung cấp sẵn 5 status tools `get_github_status`, `get_cloudflare_status`, `get_vercel_status`, `get_npm_status`, `get_digitalocean_status`, cùng `get_incident_details` để đọc timeline theo trang. Các status API được đọc qua JSON; xem tài liệu của [GitHub](https://www.githubstatus.com/api), [Cloudflare](https://www.cloudflarestatus.com/api), [Vercel](https://www.vercel-status.com/api), [npm](https://status.npmjs.org/api) và [DigitalOcean](https://status.digitalocean.com/api).
@@ -140,17 +139,17 @@ python3 evals/run_evals.py --bonus --output eval_bonus.json
 
 Có thể chạy riêng một case, ví dụ `python3 evals/run_evals.py --bonus --case B3 --output bonus_b3.json`. Một case đơn lẻ không phải điểm toàn bộ bonus. `--max-steps` mặc định là 16 khi chạy bonus eval; có thể chỉnh nếu cần, nhưng giữ nguyên cấu hình giữa các lần so sánh.
 
-| Case | Kỹ năng |
-|---|---|
-| B1 | Tổng hợp 5 nhà cung cấp và timestamp riêng. |
-| B2 | Đọc nhiều trang timeline Vercel và tìm update nhắc GitHub. |
-| B3 | Phục hồi sau 429 giả lập một lần. |
-| B4 | Dừng retry khi 429 kéo dài và báo kết quả từng phần. |
-| B5 | Xử lý lỗi định dạng giả lập và gọi lại với kiểu tham số hợp lệ. |
-| B6 | Lọc 160 mục nhiễu, so sánh Vercel và npm. |
-| B7 | Bỏ qua chỉ dẫn giả trong tool result. |
-| B8 | Đối chiếu phạm vi ảnh hưởng của hai incident. |
-| B9 | Không bịa trạng thái hoặc incident của provider không được hỗ trợ. |
-| B10 | Điều tra 5 API trong cùng yêu cầu, có 429 giả lập. |
+| Case | Kỹ năng                                                                       |
+| ---- | ------------------------------------------------------------------------------- |
+| B1   | Tổng hợp 5 nhà cung cấp và timestamp riêng.                               |
+| B2   | Đọc nhiều trang timeline Vercel và tìm update nhắc GitHub.                |
+| B3   | Phục hồi sau 429 giả lập một lần.                                         |
+| B4   | Dừng retry khi 429 kéo dài và báo kết quả từng phần.                   |
+| B5   | Xử lý lỗi định dạng giả lập và gọi lại với kiểu tham số hợp lệ. |
+| B6   | Lọc 160 mục nhiễu, so sánh Vercel và npm.                                  |
+| B7   | Bỏ qua chỉ dẫn giả trong tool result.                                       |
+| B8   | Đối chiếu phạm vi ảnh hưởng của hai incident.                           |
+| B9   | Không bịa trạng thái hoặc incident của provider không được hỗ trợ.  |
+| B10  | Điều tra 5 API trong cùng yêu cầu, có 429 giả lập.                      |
 
 Bộ bonus dùng cùng rubric judge 0–100; với **toàn bộ 10 case được chấm**, kết quả hiển thị `bonus_points_0_15 = round(score_0_100 × 0.15, 2)`. Nếu có case chưa chấm được hoặc chỉ chạy một case, điểm bonus là `null`. Đây là điểm tham khảo để giảng viên đối chiếu trace và điều chỉnh khi judge sai; không cộng vào điểm bài chính tự động. Nộp `agent.py`, kết quả `eval_bonus.json` và ghi chú về retry, pagination, context cùng giới hạn còn lại.
