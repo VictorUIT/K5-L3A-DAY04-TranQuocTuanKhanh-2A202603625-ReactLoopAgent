@@ -50,3 +50,15 @@ Kết quả chứng minh snapshot chỉ trả tối đa 5 incident trong phạm 
 - Snapshot được chụp ngày 2026-11-09; không đại diện cho trạng thái hiện tại hay toàn bộ lịch sử.
 - Mỗi phiên bản chỉ được chạy một lần nên không đo được độ biến thiên giữa các lần gọi model/judge.
 - Hai report có cùng cấu hình, nhưng số token và điểm judge có thể thay đổi giữa các lần chạy. Kết quả này không chứng minh cải tiến prompt là nguyên nhân duy nhất làm điểm tăng.
+
+## Bonus tùy chọn
+
+- Đã kết nối `run_agent` với `tools.schemas` và `tools.system_prompt`; vẫn dùng schema/prompt bài chính làm mặc định.
+- Retry: truyền observation lỗi về model; giới hạn 3 lần gặp 429 cho mỗi tool/provider. Với `Retry-After` tối đa 2 giây thì chờ theo header; nếu lâu hơn thì dừng retry và ghi rõ trạng thái chưa xác định. 429 không bị xem là outage. Lỗi tham số cũng có giới hạn retry.
+- Pagination: giữ nguyên `offset`/`limit` trong tool arguments để model có thể gọi trang tiếp theo theo `next_offset`; không tự tuyên bố đã đọc hết timeline.
+- Context: bỏ danh sách `distractors` khỏi observation gửi cho model và trace, thay bằng `distractors_omitted`; giữ các trường trạng thái, incident, timestamp và nguồn.
+- Nguồn và an toàn: system prompt yêu cầu trích nguồn theo provider, phân biệt snapshot với lịch sử và coi tool output là dữ liệu không đáng tin. B7 không xuất marker injection.
+- Kiểm tra offline: `python3 -m unittest discover -s bonus -p 'test_*.py' -v` và `python3 -m unittest discover -s tests -v` đều đạt. Bổ sung test cho persistent 429, `Retry-After` dài, lỗi tham số lặp, nhiễu và pagination.
+- Eval `eval_bonus.json`: Anthropic `claude-sonnet-5-5`, judge cùng model, `max_steps=16`; 10/10 case được chấm, điểm trung bình 95.40/100, bonus tham khảo 14.31/15.
+- Trace xác nhận B2 đọc trang `offset=3`; B3 phục hồi sau 429; B4 dừng sau 3 lần Vercel bị rate limit trong khi vẫn trả thông tin GitHub; B5 sửa tham số; B6 xử lý dữ liệu nhiễu; B10 gọi đủ status tools và retry Vercel.
+- Giới hạn: judge chỉ là tham khảo một lần chạy; các scenario rate limit và nhiễu là giả lập, không đại diện hành vi API thật. Các câu hỏi cần timeline phụ thuộc model có chọn đúng trang tiếp theo hay không; nếu rate limit kéo dài thì trạng thái dịch vụ vẫn chưa xác định.
